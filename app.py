@@ -3,20 +3,20 @@ import tensorflow as tf
 import numpy as np
 from PIL import Image
 import os
-import requests
+import gdown
 
 st.title("🩻 X-ray Pneumonia Detector")
 st.write("Upload a chest X-ray image and I will predict if it shows pneumonia or not.")
 
-# Load model from Google Drive
+# Load model from Google Drive using gdown
 @st.cache_resource
 def load_model():
     url = "https://drive.google.com/uc?id=1rYMbGaJJLt1Zu-rNDnwr0eCOH3N46XbJ"
     output_path = "xray_model.h5"
 
+    # تحميل الملف إذا مش موجود
     if not os.path.exists(output_path):
-        with open(output_path, "wb") as f:
-            f.write(requests.get(url).content)
+        gdown.download(url, output_path, quiet=False)
 
     model = tf.keras.models.load_model(output_path)
     return model
